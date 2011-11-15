@@ -28,16 +28,18 @@ set -e
 # Prints the help text for spark.
 #
 # Returns nothing.
+
 help()
 {
-  echo "spark\n"
-  echo "USAGE:"
-  echo "  spark [comma,separated,value,list]\n"
-  echo "EXAMPLES:"
-  echo "  spark 1,5,22,13,53"
-  echo "  ▁▁▃▂▇"
-  echo "  spark 0,30,55,80,33,150"
-  echo "  ▁▂▃▅▂▇"
+  script_name="$(basename "$0")"
+  echo "$script_name
+USAGE:
+  $script_name [comma,separated,value,list]
+EXAMPLES:
+  $script_name 1,5,22,13,53
+   ▁▁▃▂▇
+  $script_name 0,30,55,80,33,150
+   ▁▂▃▅▂▇"
 }
 
 # The actual fun characters we are generating in the sparkline.
@@ -101,7 +103,7 @@ print_tick()
 
     if [ $result -eq 1 ]
     then
-      echo "$tick"
+      echo -n "$tick"
       return
     fi
   done
@@ -117,7 +119,7 @@ print_ticks()
 {
   for number in ${numbers[@]}
   do
-    echo $"$(print_tick $number)\c"
+    echo -n "$(print_tick $number)"
   done
   echo ""
 }
