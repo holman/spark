@@ -24,6 +24,8 @@
 #   spark -h
 #   # => Prints the spark help text.
 set -e
+debug='false'
+zero_baseline='false'
 
 # Prints the help text for spark.
 #
@@ -45,7 +47,7 @@ EOF
 
 # The actual fun characters we are generating in the sparkline.
 ticks=(▁ ▂ ▃ ▄ ▅ ▆ ▇)
-
+number_of_tiers=$(( ${#ticks[@]} - 1 ))
 # The numbers the user gave us.
 numbers=()
 
@@ -63,28 +65,46 @@ setup_array() {
   # convert comma-separated string to array
   IFS=,
   sorted=($sorted)
+
+  to_rational ${sorted[0]}
+  if $zero_baseline ; then
+    min_n=0
+    min_d=1
+  else
+    min_n=$n
+    min_d=$d
+  fi
+
+  to_rational ${sorted[${#sorted[@]} - 1]}
+  max_n=$n
+  max_d=$d
+
+  range_n=$(( max_n * min_d - min_n * max_d ))
+  range_d=$(( max_d * min_d ))
+  if [[ $range_n = 0 ]] ; then
+    range_n=1
+    range_d=1
+  fi
+
   numbers=($1)
 }
 
-# The maximum value of the sorted array. In other words, the last value.
-sort_max()
-{
-  last=${#sorted[@]}
-  echo ${sorted[$last - 1]}
-}
-
-# The minimum value of the sorted array. In other words, the first value.
-sort_min()
-{
-  echo ${sorted[0]}
-}
-
-# Find the distance between tiers so we know which tick to assign a character.
-tier()
-{
-  number_of_ticks=${#ticks[@]}
-  distance=$(( $(sort_max) / $number_of_ticks ))
-  echo $distance
+# given an input number which might be a decimal, convert it to
+# a rational number; set n and d to its numerator and
+# denominator.  For example, 3.3 becomes n=33 and d=10;
+# 17 becomes n=17 and d=1.
+to_rational() {
+  # Crapulent bash can't handle decimal numbers, so we will convert
+  # the input number to a rational
+  if [[ $1 =~ (.*)\.(.*) ]] ; then
+      i_part=${BASH_REMATCH[1]}
+      f_part=${BASH_REMATCH[2]}
+      n="$i_part$f_part";
+      d=$(( 10 ** ${#f_part} ))
+  else
+      n=$1
+      d=1
+  fi
 }
 
 # Determines what tick we should print for this number and prints it.
@@ -92,28 +112,31 @@ tier()
 # Returns nothing.
 print_tick()
 {
-  tier=$(tier)
+  # The following rigamarole calculates
+  #   ($number - $min) / $tier_size
+  # using rational arithmetic. This is necessary because $((...)) only
+  # does integer calculations and because shelling out to bc or dc is
+  # slow and nonportable
+  to_rational $1
 
-  for (( i = 0 ; i < ${#numbers[@]} ; i++ ))
-  do
-    tick=${ticks[$i]}
-    number=$1
-    less_than=$(( $i * $tier + sort_min + $tier ))
-    greater_than=$(( ($i - 1) * $tier + sort_min + $tier ))
-    result=$(( $number <= $less_than && $number >= $greater_than ))
+  tick_index_d=$(( range_n * d * min_d ))
+  tick_index_n=$(( ( n * min_d - min_n * d ) * number_of_tiers * range_d ))
 
-    if [ $result -eq 1 ]
-    then
-      printf '%s' "$tick"
-      return
-    fi
-  done
+  # round to nearest integer: first add 1/2
+  tick_index_an=$(( tick_index_n * 2 + tick_index_d ))
+  tick_index_ad=$(( tick_index_d * 2 ))
 
-  last=${#ticks[@]}
-  printf '%s' ${ticks[$last-1]}
+  # divide and truncate
+  tick_index=$(( tick_index_an / tick_index_ad ))
+
+  if $debug; then
+    echo "$number $tick_index_n / $tick_index_d = $tick_index"
+  else
+    echo -n ${ticks[$tick_index]};
+  fi
 }
 
-# Iterate over all of our ticks and print them out.
+# Iterate over all of our data and print them out.
 #
 # Returns nothing.
 print_ticks()
@@ -125,10 +148,12 @@ print_ticks()
   echo
 }
 
-while getopts ":h" option; do
+while getopts ":hdz" option; do
   case "$option" in
     h) help && exit ;;
 #    [?]) echo "$OPTARG";;
+    d) debug='true'; shift $((OPTIND-1)) ;;
+    z) zero_baseline='true'; shift $((OPTIND-1)) ;;
   esac
 done
 
