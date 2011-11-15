@@ -133,7 +133,7 @@ while getopts ":h" option; do
 done
 
 # Accept input from $1 or from the pipeline.
-if [ -n "$*" ]
+if test "$*" != ""
 then
   data="$*"
 else
