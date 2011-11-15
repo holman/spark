@@ -81,6 +81,10 @@ setup_array() {
 
   range_n=$(( max_n * min_d - min_n * max_d ))
   range_d=$(( max_d * min_d ))
+  if [[ $range_n = 0 ]] ; then
+    range_n=1
+    range_d=1
+  fi
 
   numbers=($1)
 }

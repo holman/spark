@@ -64,3 +64,13 @@ it_zero_baseline() {
   test $(echo $data | $spark)    = '▁▄▇'
   test $(echo $data | $spark -z) = '▅▆▇'  
 }
+
+# tests for when min=max
+it_zero_range() {
+  test $($spark '1,1,1,1')    = '▁▁▁▁'
+  test $($spark '53')         = '▁'
+  test $($spark -z '1,1,1,1') = '▇▇▇▇'
+  test $($spark -z '53')      = '▇'
+  test $($spark '0,0,0,0')    = '▁▁▁▁'
+  test $($spark '0')          = '▁'
+}
