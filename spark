@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # spark
 # https://github.com/holman/spark
@@ -28,20 +28,26 @@ set -e
 # Prints the help text for spark.
 #
 # Returns nothing.
+#
+# Add dynamic scriptname from https://github.com/cathoderay/spark/commit/f279926d393207296a8e7a6701d0f44717e01882
 help()
 {
-  echo -e "spark\n"
-  echo "USAGE:"
-  echo -e "  spark [comma,separated,value,list]\n"
-  echo "EXAMPLES:"
-  echo "  spark 1,5,22,13,53"
-  echo "  ▁▁▃▂▇"
-  echo "  spark 0,30,55,80,33,150"
-  echo "  ▁▂▃▅▂▇"
+	script_name="$(basename "$0")"
+
+	echo -e "${script_name}\n"
+	echo "USAGE:"
+	echo -e "  ${script_name} [comma,separated,value,list]\n"
+	echo "EXAMPLES:"
+	echo "  ${script_name} 1,5,22,13,53"
+	echo "  ▁▁▄▃█"
+	echo "  ${script_name} 0,30,55,80,33,150"
+	echo "  ▁▂▄▅▂█"
 }
 
 # The actual fun characters we are generating in the sparkline.
-ticks=(▁ ▂ ▃ ▅ ▆ ▇)
+# copy from https://github.com/quag/spark/commit/5fa8a4c204cf0f3de57793480bdafafa229c3011 Line: 34
+ticks=(▁ ▂ ▃ ▄ ▅ ▆ ▇ █)
+
 
 # The numbers the user gave us.
 numbers=()
