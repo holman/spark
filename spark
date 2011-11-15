@@ -150,4 +150,4 @@ fi
 data=$(echo $data | tr -s ' ' ',')
 
 setup_array $data
-print_ticks $data
+print_ticks $datass
