@@ -103,7 +103,7 @@ print_tick()
 
     if [ $result -eq 1 ]
     then
-      echo "$tick"
+      echo -n "$tick"
       return
     fi
   done
@@ -119,7 +119,7 @@ print_ticks()
 {
   for number in ${numbers[@]}
   do
-    echo $"$(print_tick $number)\c"
+    echo -n "$(print_tick $number)"
   done
   echo ""
 }
