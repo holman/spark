@@ -56,6 +56,20 @@ Code visualization. The number of characters of `spark` itself, by line, ignorin
   ▁▁▁▁▅▁▇▁▁▅▁▁▁▁▁▂▂▁▃▃▁▁▃▁▃▁▂▁▁▂▂▅▂▃▂▃▃▁▆▃▃▃▁▇▁▁▂▂▂▇▅▁▂▂▁▇▁▃▁▇▁▂▁▇▁▁▆▂▁▇▁▂▁▁▂▅▁▂▁▆▇▇▂▁▂▁▁▁▂▂▁▅▁▂▁▁▃▁▃▁▁▁▃▂▂▂▁▁▅▂▁▁▁▁▂▂▁▁▁▂▂
 ```
 
+User login time since last reboot
+
+```bash
+  # get users for a specific group
+  # needs to be improved 
+  users=$(getent group uquota | cut -d ':' -f 4 | tr ',' '\n')
+  gr=""
+  for i in $users
+    do
+    gr="$gr$(last | sort | grep $i | cut -c 67-71 | tr ":" " " | awk 'BEGIN {sum=0;  } {sum += $1*60+$2; } END { print sum}'),"
+  done
+  spark $gr
+```
+
 Since it's just a shell script, you could pop it in your prompt, too:
 
 ```
