@@ -118,11 +118,13 @@ print_tick()
 # Returns nothing.
 print_ticks()
 {
+  tick_string=
   for number in ${numbers[@]}
   do
-    printf "%s" $"$(print_tick $number)"
+    new_tick=$(print_tick $number)
+    tick_string=$tick_string$new_tick
   done
-  echo ""
+  echo $tick_string
 }
 
 while getopts ":h" option; do
