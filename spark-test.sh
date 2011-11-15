@@ -7,7 +7,7 @@ spark="./spark"
 it_graphs_argv_data() {
   graph="$($spark 1,5,22,13,5)"
 
-  test $graph = '▁▂▇▅▂'
+  test $graph = '▁▂▇▄▂'
 }
 
 it_charts_pipe_data() {
