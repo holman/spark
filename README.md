@@ -11,10 +11,11 @@ to your `$PATH`. It's helpful if you have a super-neat collection of dotfiles,
 
 ## usage
 
-Just run `spark` and pass it a comma-delimited list of numbers. It's designed
-to be used in conjunction with other scripts that can output in that format.
+Just run `spark` and pass it a list of numbers (comma-delimited, spaces,
+whatever you'd like). It's designed to be used in conjunction with other
+scripts that can output in that format.
 
-    spark 0,30,55,80,33,150
+    spark 0 30 55 80 33 150
     ▁▂▃▅▂▇
 
 Invoke help with `spark -h`.
