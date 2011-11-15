@@ -39,7 +39,7 @@ it_handles_decimals() {
 }
 
 it_charts_sequence() {
-  res = '▁▂▃▄▅▆▇'
+  res='▁▂▃▄▅▆▇'
   data="1,2,3,4,5,6,7"
   test $(echo $data | $spark) = $res
   data="2,3,4,5,6,7,8"
