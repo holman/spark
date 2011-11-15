@@ -70,11 +70,14 @@ Sounds like a wiki is a great place to collect all of your
 
 ## todo
 
+so hint hint hint if you're looking for something to hack on.
+
 - Speedup. It's a little more sluggish than it should be since we're doing a
   few unnecessary loops.
 - I'd like to constrain character widths with a `-w` switch.
 - POSIX-compliant. I cheated with some bash functions, but I'd like to get down
   to basics and just do something ultimately portable for everyone.
+- Add tests with Blake's [roundup][roundup].
 
 ## ▇▁ ⟦⟧ ▇▁
 
@@ -83,4 +86,5 @@ This is a [@holman][holman] joint.
 [dotfiles]: https://github.com/holman/dotfiles 
 [bin]:      https://github.com/holman/spark/blob/master/spark
 [wiki]:     https://github.com/holman/spark/wiki/Wicked-Cool-Usage
+[roundup]:  https://github.com/bmizerany/roundup
 [holman]:   https://twitter.com/holman
