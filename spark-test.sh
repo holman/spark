@@ -16,3 +16,10 @@ it_charts_pipe_data() {
 
   test $graph = '▁▂▃▄▂▇'
 }
+
+it_handles_decimals() {
+  data="5.5,20"
+  graph="$($spark $data)"
+
+  test $graph = '▂▇'
+}
