@@ -25,7 +25,6 @@
 #   # => Prints the spark help text.
 set -e
 debug='false'
-fudge='0.5' # for rounding, when debug mode is not enabled
 
 # Prints the help text for spark.
 #
@@ -47,7 +46,7 @@ EOF
 
 # The actual fun characters we are generating in the sparkline.
 ticks=(▁ ▂ ▃ ▄ ▅ ▆ ▇)
-number_of_ticks=$(( ${#ticks[@]} - 1 ))
+number_of_tiers=$(( ${#ticks[@]} - 1 ))
 # The numbers the user gave us.
 numbers=()
 
@@ -65,19 +64,37 @@ setup_array() {
   # convert comma-separated string to array
   IFS=,
   sorted=($sorted)
-  sort_min=${sorted[0]}
-  sort_max=${sorted[${#sorted[@]} - 1]}
-  tier_size=$(tier_size)
+
+  to_rational ${sorted[0]}
+  min_n=$n
+  min_d=$d
+
+  to_rational ${sorted[${#sorted[@]} - 1]}
+  max_n=$n
+  max_d=$d
+
+  range_n=$(( max_n * min_d - min_n * max_d ))
+  range_d=$(( max_d * min_d ))
+
   numbers=($1)
 }
 
-# Find the distance between tiers so we know which tick to assign to each input
-tier_size()
-{
-  number_of_ticks=${#ticks[@]}
-  # Mustn't use $((..)) here because we need floating-point arithmetic
-  distance=$( echo " ($sort_max - $sort_min) / ($number_of_ticks - 1)" | bc -l )
-  echo $distance
+# given an input number which might be a decimal, convert it to
+# a rational number; set n and d to its numerator and
+# denominator.  For example, 3.3 becomes n=33 and d=10;
+# 17 becomes n=17 and d=1.
+to_rational() {
+  # Crapulent bash can't handle decimal numbers, so we will convert
+  # the input number to a rational
+  if [[ $1 =~ (.*)\.(.*) ]] ; then
+      i_part=${BASH_REMATCH[1]}
+      f_part=${BASH_REMATCH[2]}
+      n="$i_part$f_part";
+      d=$(( 10 ** ${#f_part} ))
+  else
+      n=$1
+      d=1
+  fi
 }
 
 # Determines what tick we should print for this number and prints it.
@@ -85,23 +102,27 @@ tier_size()
 # Returns nothing.
 print_tick()
 {
-  number=$1
-  # Don't use $((...)) here; we need floating-point arithmetic
-  tick_index=$( echo " ($number - $sort_min) / $tier_size + $fudge " | bc -l )
-  # + 0.5 in previous line causes 'truncate' to round off to the nearest integer
-  if $debug ; then
-    echo "$number $tick_index"
+  # The following rigamarole calculates
+  #   ($number - $min) / $tier_size
+  # using rational arithmetic. This is necessary because $((...)) only
+  # does integer calculations and because shelling out to bc or dc is
+  # slow and nonportable
+  to_rational $1
+  tick_index_d=$(( range_n * d * min_d ))
+  tick_index_n=$(( ( n * min_d - min_n * d ) * number_of_tiers * range_d ))
+
+  # round to nearest integer: first add 1/2
+  tick_index_an=$(( tick_index_n * 2 + tick_index_d ))
+  tick_index_ad=$(( tick_index_d * 2 ))
+
+  # divide and truncate
+  tick_index=$(( tick_index_an / tick_index_ad ))
+
+  if $debug; then
+    echo "$number $tick_index_n / $tick_index_d = $tick_index"
   else
-    tick_index=$(truncate $tick_index)
     echo -n ${ticks[$tick_index]};
   fi
-}
-
-# $((...)) and printf both produce syntax errors on decimal numbers, so
-# we will use a stone knife instead
-truncate()
-{
-   echo $1 | sed -e 's/\..*$//'
 }
 
 # Iterate over all of our data and print them out.
