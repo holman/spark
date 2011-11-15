@@ -1,0 +1,18 @@
+#!/bin/sh
+#
+# Run roundup tests for spark.
+#
+
+roundup=$(which roundup)
+
+[ ! -z $roundup ] || {
+  cat <<MESSAGE 1>&2 ;
+error: roundup missing
+
+Check out https://github.com/bmizerany/roundup for instructions on installing roundup.
+MESSAGE
+
+  exit 1;
+}
+
+$roundup ./*-test.sh
