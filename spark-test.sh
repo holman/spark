@@ -31,6 +31,7 @@ it_charts_way_spaced_data() {
   test $graph = '▁▂▃▄▂▇'
 }
 
+# tests to make sure decimal inputs are handled properly
 it_handles_decimals() {
   data="5.5,20"
   graph="$($spark $data)"
@@ -41,6 +42,7 @@ it_handles_decimals() {
   test $($spark '0.1,0.2,0.3,0.4,0.5,0.6,0.7') = '▁▂▃▄▅▆▇'
 }
 
+# tests of various staircase patterns
 it_charts_sequence() {
   res='▁▂▃▄▅▆▇'
   data="1,2,3,4,5,6,7"
@@ -55,6 +57,7 @@ it_charts_sequence() {
   test $(echo $data | $spark) = $res
 }
 
+# tests of -z command-line flag
 it_zero_baseline() {
   data='100,101,102,103,104,105,106'
   test $(echo $data | $spark)    = '▁▂▃▄▅▆▇'
