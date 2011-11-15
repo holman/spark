@@ -104,13 +104,13 @@ print_tick()
 
     if [ $result -eq 1 ]
     then
-      echo "$tick"
+      printf '%s' "$tick"
       return
     fi
   done
 
   last=${#ticks[@]}
-  echo ${ticks[$last-1]}
+  printf '%s' ${ticks[$last-1]}
 }
 
 # Iterate over all of our ticks and print them out.
@@ -118,13 +118,11 @@ print_tick()
 # Returns nothing.
 print_ticks()
 {
-  tick_string=
   for number in ${numbers[@]}
   do
-    new_tick=$(print_tick $number)
-    tick_string=$tick_string$new_tick
+    print_tick $number
   done
-  echo $tick_string
+  echo
 }
 
 while getopts ":h" option; do
