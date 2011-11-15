@@ -133,9 +133,9 @@ while getopts ":h" option; do
 done
 
 # Accept input from $1 or from the pipeline.
-if test "$1" != ""
+if [ -n "$*" ]
 then
-  data="$1"
+  data="$*"
 else
   # check to see if stdin's a tty
   if [ -t 0 ]; then
@@ -145,6 +145,9 @@ else
 
   read data
 fi
+
+# Trim spaces to allow input like '1, 2, 3'
+data=$(echo $data | tr -d ' ')
 
 setup_array $data
 print_ticks $data
