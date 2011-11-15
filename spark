@@ -44,7 +44,7 @@ EOF
 }
 
 # The actual fun characters we are generating in the sparkline.
-ticks=(▁ ▂ ▃ ▅ ▆ ▇)
+ticks=(▁ ▂ ▃ ▄ ▅ ▆ ▇")
 
 # The numbers the user gave us.
 numbers=()
