@@ -24,6 +24,8 @@
 #   spark -h
 #   # => Prints the spark help text.
 set -e
+debug='false'
+fudge='0.5' # for rounding, when debug mode is not enabled
 
 # Prints the help text for spark.
 #
@@ -98,10 +100,14 @@ print_tick()
   number=$1
   number_of_ticks=$(( ${#ticks[@]} - 1 ))
   # Don't use $((...)) here; we need floating-point arithmetic
-  tick_index=$( echo " ($number - $(sort_min)) / $tier + 0.5 " | bc -l )
+  tick_index=$( echo " ($number - $(sort_min)) / $tier + $fudge " | bc -l )
   # + 0.5 in previous line causes 'truncate' to round off to the nearest integer
-  tick_index=$(truncate $tick_index)
-  echo -n ${ticks[$tick_index]};
+  if $debug ; then
+    echo "$number $tick_index"
+  else
+    tick_index=$(truncate $tick_index)
+    echo -n ${ticks[$tick_index]};
+  fi
 }
 
 # $((...)) and printf both produce syntax errors on decimal numbers, so
@@ -123,10 +129,11 @@ print_ticks()
   echo
 }
 
-while getopts ":h" option; do
+while getopts ":hd" option; do
   case "$option" in
     h) help && exit ;;
 #    [?]) echo "$OPTARG";;
+    d) debug='true'; fudge='0'; shift $((OPTIND-1)) ;;
   esac
 done
 
