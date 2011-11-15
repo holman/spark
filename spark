@@ -113,7 +113,7 @@ print_tick()
 {
   tier=$(tier)
 
-  for (( i = 0 ; i < ${#numbers[@]} ; i++ ))
+  for (( i = 0 ; i < ${#ticks[@]} ; i++ ))
   do
 
     number=$1
