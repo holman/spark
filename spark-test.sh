@@ -36,6 +36,9 @@ it_handles_decimals() {
   graph="$($spark $data)"
 
   test $graph = '▁▇'
+
+  test $($spark '1,1.2,1.6,2.2,2.6,7') = '▁▁▂▂▃▇'
+  test $($spark '0.1,0.2,0.3,0.4,0.5,0.6,0.7') = '▁▂▃▄▅▆▇'
 }
 
 it_charts_sequence() {
