@@ -64,5 +64,6 @@ it_charts_no_tier_0() {
   data="1,2,3,4,5"
   graph="$($spark $data)"
 
-  test $graph = '▇▇▇▇▇'
+  test $graph = '▁▂▃▄▅'
+
 }

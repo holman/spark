@@ -103,6 +103,10 @@ tier()
 {
   number_of_ticks=${#ticks[@]}
   distance=$(( $(sort_max) / $number_of_ticks ))
+  if [ $distance -eq 0 ]
+  then
+    distance=1
+  fi
   echo $distance
 }
 
@@ -177,4 +181,6 @@ data=$(echo $data | tr -s ' ' ',')
 setup_array $data
 debug "num.ticks: %s\n" ${#ticks[@]}
 debug "tier:%s\n" "$(tier)"
+debug "max:%s\n" "$(sort_max)"
+debug "min:%s\n" "$(sort_min)"
 print_ticks $data
