@@ -54,3 +54,13 @@ it_charts_sequence() {
   data="12,22,32,42,52,62,72"
   test $(echo $data | $spark) = $res
 }
+
+it_zero_baseline() {
+  data='100,101,102,103,104,105,106'
+  test $(echo $data | $spark)    = '▁▂▃▄▅▆▇'
+  test $(echo $data | $spark -z) = '▇▇▇▇▇▇▇'
+
+  data='5,6,7'
+  test $(echo $data | $spark)    = '▁▄▇'
+  test $(echo $data | $spark -z) = '▅▆▇'  
+}

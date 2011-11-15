@@ -25,6 +25,7 @@
 #   # => Prints the spark help text.
 set -e
 debug='false'
+zero_baseline='false'
 
 # Prints the help text for spark.
 #
@@ -66,8 +67,13 @@ setup_array() {
   sorted=($sorted)
 
   to_rational ${sorted[0]}
-  min_n=$n
-  min_d=$d
+  if $zero_baseline ; then
+    min_n=0
+    min_d=1
+  else
+    min_n=$n
+    min_d=$d
+  fi
 
   to_rational ${sorted[${#sorted[@]} - 1]}
   max_n=$n
@@ -108,6 +114,7 @@ print_tick()
   # does integer calculations and because shelling out to bc or dc is
   # slow and nonportable
   to_rational $1
+
   tick_index_d=$(( range_n * d * min_d ))
   tick_index_n=$(( ( n * min_d - min_n * d ) * number_of_tiers * range_d ))
 
@@ -137,11 +144,12 @@ print_ticks()
   echo
 }
 
-while getopts ":hd" option; do
+while getopts ":hdz" option; do
   case "$option" in
     h) help && exit ;;
 #    [?]) echo "$OPTARG";;
-    d) debug='true'; fudge='0'; shift $((OPTIND-1)) ;;
+    d) debug='true'; shift $((OPTIND-1)) ;;
+    z) zero_baseline='true'; shift $((OPTIND-1)) ;;
   esac
 done
 
