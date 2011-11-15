@@ -73,6 +73,8 @@ Sounds like a wiki is a great place to collect all of your
 - Speedup. It's a little more sluggish than it should be since we're doing a
   few unnecessary loops.
 - I'd like to constrain character widths with a `-w` switch.
+- POSIX-compliant. I cheated with some bash functions, but I'd like to get down
+  to basics and just do something ultimately portable for everyone.
 
 ## ▇▁ ⟦⟧ ▇▁
 
