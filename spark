@@ -83,7 +83,8 @@ sort_min()
 tier()
 {
   number_of_ticks=${#ticks[@]}
-  distance=$(( $(sort_max) / $number_of_ticks ))
+  # Mustn't use $((..)) here because we need floating-point arithmetic
+  distance=$( echo " ($(sort_max) - $(sort_min)) / ($number_of_ticks - 1)" | bc -l )
   echo $distance
 }
 
@@ -94,26 +95,23 @@ print_tick()
 {
   tier=$(tier)
 
-  for (( i = 0 ; i < ${#numbers[@]} ; i++ ))
-  do
-    tick=${ticks[$i]}
-    number=$1
-    less_than=$(( $i * $tier + sort_min + $tier ))
-    greater_than=$(( ($i - 1) * $tier + sort_min + $tier ))
-    result=$(( $number <= $less_than && $number >= $greater_than ))
-
-    if [ $result -eq 1 ]
-    then
-      printf '%s' "$tick"
-      return
-    fi
-  done
-
-  last=${#ticks[@]}
-  printf '%s' ${ticks[$last-1]}
+  number=$1
+  number_of_ticks=$(( ${#ticks[@]} - 1 ))
+  # Don't use $((...)) here; we need floating-point arithmetic
+  tick_index=$( echo " ($number - $(sort_min)) / $tier + 0.5 " | bc -l )
+  # + 0.5 in previous line causes 'truncate' to round off to the nearest integer
+  tick_index=$(truncate $tick_index)
+  echo -n ${ticks[$tick_index]};
 }
 
-# Iterate over all of our ticks and print them out.
+# $((...)) and printf both produce syntax errors on decimal numbers, so
+# we will use a stone knife instead
+truncate()
+{
+   echo $1 | sed -e 's/\..*$//'
+}
+
+# Iterate over all of our data and print them out.
 #
 # Returns nothing.
 print_ticks()

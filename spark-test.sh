@@ -37,3 +37,17 @@ it_handles_decimals() {
 
   test $graph = '▂▇'
 }
+
+it_charts_sequence() {
+  res = '▁▂▃▄▅▆▇'
+  data="1,2,3,4,5,6,7"
+  test $(echo $data | $spark) = $res
+  data="2,3,4,5,6,7,8"
+  test $(echo $data | $spark) = $res
+  data="10,11,12,13,14,15,16"
+  test $(echo $data | $spark) = $res
+  data="10,20,30,40,50,60,70"
+  test $(echo $data | $spark) = $res
+  data="12,22,32,42,52,62,72"
+  test $(echo $data | $spark) = $res
+}
