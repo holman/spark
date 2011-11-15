@@ -59,7 +59,6 @@ sorted=()
 setup_array() {
   # 3,6,2 => 2,3,6
   sorted=$(echo $1 | tr ',' '\n' | sort -k1,1n | paste -s -d',' -)
-
   # convert comma-separated string to array
   IFS=,
   sorted=($sorted)
@@ -93,15 +92,14 @@ tier()
 print_tick()
 {
   tier=$(tier)
-
-  for (( i = 0 ; i < ${#numbers[@]} ; i++ ))
+  for (( i = 0 ; i < ${#ticks[@]} ; i++ ))
   do
+    s=0
     tick=${ticks[$i]}
     number=$1
     less_than=$(echo "$i * $tier + sort_min + $tier" | bc)
     greater_than=$(echo "($i - 1) * $tier + sort_min + $tier" | bc)
     result=$(echo "$number <= $less_than && $number >= $greater_than" | bc)
-
     if [ $result -eq 1 ]
     then
       echo "$tick"
