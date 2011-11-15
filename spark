@@ -25,6 +25,24 @@
 #   # => Prints the spark help text.
 set -e
 
+# Debugging information
+#
+# Use "debug=1 ./spark" to enable debugging.
+if test "$debug" == ""
+then
+  debug()
+  {
+    # do nothing
+    true
+  }
+else
+  debug()
+  {
+    fmt=$1; shift
+    printf "$fmt" "$@"
+  }
+fi
+
 # Prints the help text for spark.
 #
 # Returns nothing.
@@ -59,6 +77,7 @@ sorted=()
 setup_array() {
   # 3,6,2 => 2,3,6
   sorted=$(echo $1 | tr ',' '\n' | sort -k1,1n | paste -s -d',' -)
+  debug 'sorted: %s\n' $sorted
 
   # convert comma-separated string to array
   IFS=,
@@ -96,7 +115,7 @@ print_tick()
 
   for (( i = 0 ; i < ${#numbers[@]} ; i++ ))
   do
-    tick=${ticks[$i]}
+
     number=$1
     less_than=$(( $i * $tier + sort_min + $tier ))
     greater_than=$(( ($i - 1) * $tier + sort_min + $tier ))
@@ -104,13 +123,17 @@ print_tick()
 
     if [ $result -eq 1 ]
     then
-      printf '%s' "$tick"
+      printf '%s' "${ticks[$i]}"
+      debug "  iteration:%s - %s <= %s <= %s\n" $i $less_than $number $greater_than
       return
+    else
+      debug "  iteration:%s - %s <= %s <= %s (miss) \n" $i $less_than $number $greater_than
     fi
   done
 
   last=${#ticks[@]}
   printf '%s' ${ticks[$last-1]}
+  debug " iteration:%s - %s <= %s <= %s \n" $(($last-1)) $less_than $number $greater_than
 }
 
 # Iterate over all of our ticks and print them out.
@@ -120,6 +143,7 @@ print_ticks()
 {
   for number in ${numbers[@]}
   do
+    debug "\nNUMBER: %s\n" "$number"
     print_tick $number
   done
   echo
@@ -136,6 +160,7 @@ done
 if test "$*" != ""
 then
   data="$*"
+  debug "data: %s\n" "$data"
 else
   # check to see if stdin's a tty
   if [ -t 0 ]; then
@@ -150,4 +175,6 @@ fi
 data=$(echo $data | tr -s ' ' ',')
 
 setup_array $data
+debug "num.ticks: %s\n" ${#ticks[@]}
+debug "tier:%s\n" "$(tier)"
 print_ticks $data
