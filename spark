@@ -151,7 +151,7 @@ else
 fi
 
 # Trim spaces to allow input like '1, 2, 3'
-data=$(echo $data | tr -s ' ' ',')
+data=$(echo $data | tr -s '[:space:]' ',')
 
 setup_array $data
 print_ticks $data
