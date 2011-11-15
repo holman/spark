@@ -117,7 +117,7 @@ print_ticks()
 {
   for number in ${numbers[@]}
   do
-    echo $"$(print_tick $number)\c"
+    echo -e $"$(print_tick $number)\c"
   done
   echo ""
 }
