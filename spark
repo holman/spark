@@ -83,7 +83,7 @@ sort_min()
 tier()
 {
   number_of_ticks=${#ticks[@]}
-  distance=$(echo "$(sort_max) / $number_of_ticks" | bc)
+  distance=$(( $(sort_max) / $number_of_ticks ))
   echo $distance
 }
 
@@ -98,9 +98,9 @@ print_tick()
   do
     tick=${ticks[$i]}
     number=$1
-    less_than=$(echo "$i * $tier + sort_min + $tier" | bc)
-    greater_than=$(echo "($i - 1) * $tier + sort_min + $tier" | bc)
-    result=$(echo "$number <= $less_than && $number >= $greater_than" | bc)
+    less_than=$(( $i * $tier + sort_min + $tier ))
+    greater_than=$(( ($i - 1) * $tier + sort_min + $tier ))
+    result=$(( $number <= $less_than && $number >= $greater_than ))
 
     if [ $result -eq 1 ]
     then
