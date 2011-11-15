@@ -65,20 +65,9 @@ setup_array() {
   # convert comma-separated string to array
   IFS=,
   sorted=($sorted)
+  sort_min=${sorted[0]}
+  sort_max=${sorted[${#sorted[@]} - 1]}
   numbers=($1)
-}
-
-# The maximum value of the sorted array. In other words, the last value.
-sort_max()
-{
-  last=${#sorted[@]}
-  echo ${sorted[$last - 1]}
-}
-
-# The minimum value of the sorted array. In other words, the first value.
-sort_min()
-{
-  echo ${sorted[0]}
 }
 
 # Find the distance between tiers so we know which tick to assign a character.
@@ -86,7 +75,7 @@ tier()
 {
   number_of_ticks=${#ticks[@]}
   # Mustn't use $((..)) here because we need floating-point arithmetic
-  distance=$( echo " ($(sort_max) - $(sort_min)) / ($number_of_ticks - 1)" | bc -l )
+  distance=$( echo " ($sort_max - $sort_min) / ($number_of_ticks - 1)" | bc -l )
   echo $distance
 }
 
@@ -100,7 +89,7 @@ print_tick()
   number=$1
   number_of_ticks=$(( ${#ticks[@]} - 1 ))
   # Don't use $((...)) here; we need floating-point arithmetic
-  tick_index=$( echo " ($number - $(sort_min)) / $tier + $fudge " | bc -l )
+  tick_index=$( echo " ($number - $sort_min) / $tier + $fudge " | bc -l )
   # + 0.5 in previous line causes 'truncate' to round off to the nearest integer
   if $debug ; then
     echo "$number $tick_index"
