@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 #
 # spark
 # https://github.com/holman/spark
@@ -24,12 +25,14 @@
 #   spark -h
 #   # => Prints the spark help text.
 
+import sys, getopt, re, math, os
+
 # Prints the help text for spark.
 #
 # Returns nothing.
-help()
-{
-  cat <<-EOF
+def help():
+
+  print """
 
   USAGE:
     spark [comma,separated,value,list]
@@ -39,118 +42,99 @@ help()
     ▁▁▃▂▇
     spark 0,30,55,80,33,150
     ▁▂▃▅▂▇
-EOF
-}
+"""
 
 # The actual fun characters we are generating in the sparkline.
-ticks=(▁ ▂ ▃ ▄ ▅ ▆ ▇ █)
+ticks=[u"▁", u"▂", u"▃", u"▄", u"▅", u"▆", u"▇", u"█"]
 
 # The numbers the user gave us.
-numbers=()
+numbers=list()
 
 # The sorted array of the numbers.
-sorted=()
+sorted_=list()
 
 # This sets up our secondary array so we can actually generate the correct
 # tick.
 #
 # Returns nothing.
-setup_array() {
+def setup_array(data):
+  global numbers
+  global sorted_
+
   # 3,6,2 => 2,3,6
-  sorted=$(echo $1 | tr ',' '\n' | sort -k1,1n | paste -s -d',' -)
+  sorted_=sorted(data)
 
   # convert comma-separated string to array
-  IFS=,
-  sorted=($sorted)
-  numbers=($1)
-}
+  numbers=list(data)
+
+def round(num):
+    return int("%.0f" % num)
 
 # The maximum value of the sorted array. In other words, the last value.
-sort_max()
-{
-  last=${#sorted[@]}
-  echo $(echo ${sorted[$last - 1]} | awk '{printf "%.0f",$1}')
-}
+def sort_max():
+  return round(sorted_[-1])
 
 # The minimum value of the sorted array. In other words, the first value.
-sort_min()
-{
-  echo ${sorted[0]}
-}
+def sort_min():
+  return round(sorted_[0])
 
 # Find the distance between tiers so we know which tick to assign a character.
-tier()
-{
-  number_of_ticks=${#ticks[@]}
-  distance=$(( $(sort_max) / $number_of_ticks ))
-  if [ $distance -eq 0 ]
-  then
+def tier_():
+  number_of_ticks=len(ticks)
+  distance=sort_max() / number_of_ticks
+  if distance == 0:
     distance=1
-  fi
-  echo $distance
-}
+  return distance
 
 # Determines what tick we should print for this number and prints it.
 #
 # Returns nothing.
-print_tick()
-{
-  tier=$(tier)
+def print_tick(number):
+  tier=tier_()
 
-  for (( i = 0 ; i < ${#ticks[@]} ; i++ ))
-  do
+  for i in range(len(ticks)):
 
-    number=$(echo $1 | awk '{printf "%.0f",$1}')
-    less_than=$(( $i * $tier + sort_min + $tier ))
-    greater_than=$(( ($i - 1) * $tier + sort_min + $tier ))
-    result=$(( $number <= $less_than && $number >= $greater_than ))
+    number = round(number)
+    less_than=(i * tier) + 0 + tier
+    greater_than=(i - 1) * tier + 0 + tier
+    result=( number <= less_than and number >= greater_than )
 
-    if [ $result -eq 1 ]
-    then
-      printf '%s' "${ticks[$i]}"
+    if result:
+      sys.stdout.write(ticks[i].encode("utf-8"))
       return
-    fi
-  done
 
-  last=${#ticks[@]}
-  printf '%s' ${ticks[$last-1]}
-}
+  sys.stdout.write(ticks[-1].encode("utf-8"))
 
 # Iterate over all of our ticks and print them out.
 #
 # Returns nothing.
-print_ticks()
-{
-  for number in ${numbers[@]}
-  do
-    print_tick $number
-  done
-  echo
-}
+def print_ticks(data):
+  for number in numbers:
+    print_tick(number)
+  print
 
-while getopts ":h" option; do
-  case "$option" in
-    h) help && exit ;;
-#    [?]) echo "$OPTARG";;
-  esac
-done
+args = sys.argv[1:]
+
+optlist, args = getopt.getopt(args, ':h')
+for k, v in optlist:
+    if k == "-h":
+        help()
+        sys.exit(0)
 
 # Accept input from $1 or from the pipeline.
-if test "$*" != ""
-then
-  data="$*"
-else
+if len(args) > 0:
+    data=args[0]
+else:
   # check to see if stdin's a tty
-  if [ -t 0 ]; then
-    help
-    exit
-  fi
+  if sys.stdin.isatty():
+    help()
+    sys.exit(0)
 
-  data="`cat`"
-fi
+  data=sys.stdin.read()
 
 # Trim spaces to allow input like '1, 2, 3'
-data=$(echo $data | tr -s '[:space:]' ',')
+data = data.strip()
+data=[float((x.strip())) for x in re.split("[,\s]+", data)]
+setup_array(data)
 
-setup_array $data
-print_ticks $data
+print_ticks(data)
