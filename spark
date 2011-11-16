@@ -65,14 +65,20 @@ class Data(object):
         self.arg = arg.strip()
         self.split = re.split("[,\s]+", self.arg)
         self.numbers = [float((x.strip())) for x in self.split]
+        self.number_of_ticks = len(ticks)
+        self.setup()
 
+    def setup(self):
         self.sorted = sorted(self.numbers)
         self.max = self.sorted[-1]
         self.min = self.sorted[0]
-        self.number_of_ticks = len(ticks)
-        self.distance = self.max / self.number_of_ticks
-        if self.distance == 0:
-            self.distance = 1
+        if self.min < 0:
+            self.numbers = [(x - self.min) for x in self.numbers]
+            self.setup()
+        else:
+            self.distance = self.max / self.number_of_ticks
+            if self.distance == 0:
+                self.distance = 1
 
     def print_tick(self, number):
         """

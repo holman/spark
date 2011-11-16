@@ -65,3 +65,10 @@ it_charts_no_tier_0() {
 
   test $graph = '▂▄▅▇█'
 }
+
+it_charts_negatives() {
+  data="-10,0,10"
+  graph="$($spark -- $data)"
+
+  test $graph = '▁▄█'
+}
