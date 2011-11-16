@@ -147,7 +147,7 @@ else
     exit
   fi
 
-  read data
+  data="`cat`"
 fi
 
 # Trim spaces to allow input like '1, 2, 3'
