@@ -40,6 +40,7 @@ help()
     spark 0,30,55,80,33,150
     ▁▂▃▅▂▇
 EOF
+    exit
 }
 
 # The actual fun characters we are generating in the sparkline.
@@ -130,7 +131,7 @@ print_ticks()
 
 while getopts ":h" option; do
   case "$option" in
-    h) help && exit ;;
+    h) help ;;
 #    [?]) echo "$OPTARG";;
   esac
 done
@@ -143,7 +144,6 @@ else
   # check to see if stdin's a tty
   if [ -t 0 ]; then
     help
-    exit
   fi
 
   data="`cat`"
