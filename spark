@@ -23,7 +23,6 @@
 #
 #   spark -h
 #   # => Prints the spark help text.
-set -e
 
 # Prints the help text for spark.
 #
