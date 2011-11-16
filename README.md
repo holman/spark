@@ -26,33 +26,28 @@ There's a lot of stuff you can do.
 
 Number of commits to the github/github Git repository, by author:
 
-```bash
+```sh
 › git shortlog -s |
       cut -f1 |
-      tr "\n" ',' |
-      sed 's/ //g' |
       spark
   ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▃▁▁▁▁▁▁▁▁▂▁▁▅▁▂▁▁▁▂▁▁▁▁▁▁▁▁▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 ```
 
 Magnitude of earthquakes over 1.0 in the last 24 hours:
 
-```bash
+```sh
 › curl http://earthquake.usgs.gov/earthquakes/catalogs/eqs1day-M1.txt --silent | 
   sed '1d' |
   cut -d, -f9 |
-  tr "\n" ',' |
-  sed 's/ //g' |
   spark
   ▅▆▂▃▂▂▂▅▂▂▅▇▂▂▂▃▆▆▆▅▃▂▂▂▁▂▂▆▁▃▂▂▂▂▃▂▆▂▂▂▁▂▂▃▂▂▃▂▂▃▂▂▁▂▂▅▂▂▆▆▅▃▆
 ```
 
 Code visualization. The number of characters of `spark` itself, by line, ignoring empty lines:
 
-```bash
+```sh
 › awk '{ print length($0) }' spark |
   grep -Ev 0 |
-  tr "\n" ',' |
   spark
   ▁▁▁▁▅▁▇▁▁▅▁▁▁▁▁▂▂▁▃▃▁▁▃▁▃▁▂▁▁▂▂▅▂▃▂▃▃▁▆▃▃▃▁▇▁▁▂▂▂▇▅▁▂▂▁▇▁▃▁▇▁▂▁▇▁▁▆▂▁▇▁▂▁▁▂▅▁▂▁▆▇▇▂▁▂▁▁▁▂▂▁▅▁▂▁▁▃▁▃▁▁▁▃▂▂▂▁▁▅▂▁▁▁▁▂▂▁▁▁▂▂
 ```
