@@ -35,7 +35,7 @@ it_handles_decimals() {
   data="5.5,20"
   graph="$($spark $data)"
 
-  test $graph = '▂▇'
+  test $graph = '▃█'
 }
 
 it_charts_100_lt_300() {

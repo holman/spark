@@ -69,7 +69,7 @@ setup_array() {
 sort_max()
 {
   last=${#sorted[@]}
-  echo ${sorted[$last - 1]}
+  echo $(echo ${sorted[$last - 1]} | awk '{printf "%.0f",$1}')
 }
 
 # The minimum value of the sorted array. In other words, the first value.
@@ -100,7 +100,7 @@ print_tick()
   for (( i = 0 ; i < ${#ticks[@]} ; i++ ))
   do
 
-    number=$1
+    number=$(echo $1 | awk '{printf "%.0f",$1}')
     less_than=$(( $i * $tier + sort_min + $tier ))
     greater_than=$(( ($i - 1) * $tier + sort_min + $tier ))
     result=$(( $number <= $less_than && $number >= $greater_than ))
