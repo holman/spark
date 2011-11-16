@@ -25,14 +25,21 @@
 #   spark -h
 #   # => Prints the spark help text.
 
-import sys, getopt, re, math, os
+import getopt
+import math
+import os
+import re
+import sys
 
-# Prints the help text for spark.
-#
-# Returns nothing.
+
 def help():
+    """
+    Prints the help text for spark.
 
-  print """
+    Returns nothing.
+    """
+
+    print """
 
   USAGE:
     spark [comma,separated,value,list]
@@ -45,96 +52,80 @@ def help():
 """
 
 # The actual fun characters we are generating in the sparkline.
-ticks=[u"▁", u"▂", u"▃", u"▄", u"▅", u"▆", u"▇", u"█"]
+ticks = [u"▁", u"▂", u"▃", u"▄", u"▅", u"▆", u"▇", u"█"]
 
-# The numbers the user gave us.
-numbers=list()
 
-# The sorted array of the numbers.
-sorted_=list()
+class Data(object):
+    """
+    Container class which parses the string data from the
+    user and caches all relevant values
+    """
 
-# This sets up our secondary array so we can actually generate the correct
-# tick.
-#
-# Returns nothing.
-def setup_array(data):
-  global numbers
-  global sorted_
+    def __init__(self, arg):
+        self.arg = arg.strip()
+        self.split = re.split("[,\s]+", self.arg)
+        self.numbers = [float((x.strip())) for x in self.split]
 
-  # 3,6,2 => 2,3,6
-  sorted_=sorted(data)
+        self.sorted = sorted(self.numbers)
+        self.max = self.round(self.sorted[-1])
+        self.min = self.round(self.sorted[0])
+        self.number_of_ticks = len(ticks)
+        self.distance = self.round(self.max / self.number_of_ticks)
+        if self.distance == 0:
+            self.distance = 1
 
-  # convert comma-separated string to array
-  numbers=list(data)
+    @staticmethod
+    def round(num):
+        return int("%.0f" % num)
 
-def round(num):
-    return int("%.0f" % num)
+    def print_tick(self, num):
+        """
+        Determines what tick we should print for this number and prints it.
 
-# The maximum value of the sorted array. In other words, the last value.
-def sort_max():
-  return round(sorted_[-1])
+        Returns nothing.
+        """
 
-# The minimum value of the sorted array. In other words, the first value.
-def sort_min():
-  return round(sorted_[0])
+        for i in range(self.number_of_ticks):
 
-# Find the distance between tiers so we know which tick to assign a character.
-def tier_():
-  number_of_ticks=len(ticks)
-  distance=sort_max() / number_of_ticks
-  if distance == 0:
-    distance=1
-  return distance
+            number = self.round(num)
+            less_than = (i * self.distance) + 0 + self.distance
+            greater_than = (i - 1) * self.distance + 0 + self.distance
+            result = (number <= less_than and number >= greater_than)
 
-# Determines what tick we should print for this number and prints it.
-#
-# Returns nothing.
-def print_tick(number):
-  tier=tier_()
+            if result:
+                sys.stdout.write(ticks[i].encode("utf-8"))
+                return
 
-  for i in range(len(ticks)):
+        sys.stdout.write(ticks[-1].encode("utf-8"))
 
-    number = round(number)
-    less_than=(i * tier) + 0 + tier
-    greater_than=(i - 1) * tier + 0 + tier
-    result=( number <= less_than and number >= greater_than )
+    def print_ticks(self):
+        """
+        Iterate over all of our ticks and print them out.
 
-    if result:
-      sys.stdout.write(ticks[i].encode("utf-8"))
-      return
+        Returns nothing.
+        """
+        for number in self.numbers:
+            self.print_tick(number)
+        print
 
-  sys.stdout.write(ticks[-1].encode("utf-8"))
 
-# Iterate over all of our ticks and print them out.
-#
-# Returns nothing.
-def print_ticks(data):
-  for number in numbers:
-    print_tick(number)
-  print
+if __name__ == "__main__":
+    args = sys.argv[1:]
 
-args = sys.argv[1:]
+    optlist, args = getopt.getopt(args, ':h')
+    for k, v in optlist:
+        if k == "-h":
+            help()
+            sys.exit(0)
 
-optlist, args = getopt.getopt(args, ':h')
-for k, v in optlist:
-    if k == "-h":
-        help()
-        sys.exit(0)
+    # Accept input from $1 or from the pipeline.
+    if len(args) > 0:
+        data = Data(args[0])
+    else:
+        # check to see if stdin's a tty
+        if sys.stdin.isatty():
+            help()
+            sys.exit(0)
+        data = Data(sys.stdin.read())
 
-# Accept input from $1 or from the pipeline.
-if len(args) > 0:
-    data=args[0]
-else:
-  # check to see if stdin's a tty
-  if sys.stdin.isatty():
-    help()
-    sys.exit(0)
-
-  data=sys.stdin.read()
-
-# Trim spaces to allow input like '1, 2, 3'
-data = data.strip()
-data=[float((x.strip())) for x in re.split("[,\s]+", data)]
-setup_array(data)
-
-print_ticks(data)
+    data.print_ticks()
