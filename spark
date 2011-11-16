@@ -67,18 +67,14 @@ class Data(object):
         self.numbers = [float((x.strip())) for x in self.split]
 
         self.sorted = sorted(self.numbers)
-        self.max = self.round(self.sorted[-1])
-        self.min = self.round(self.sorted[0])
+        self.max = self.sorted[-1]
+        self.min = self.sorted[0]
         self.number_of_ticks = len(ticks)
-        self.distance = self.round(self.max / self.number_of_ticks)
+        self.distance = self.max / self.number_of_ticks
         if self.distance == 0:
             self.distance = 1
 
-    @staticmethod
-    def round(num):
-        return int("%.0f" % num)
-
-    def print_tick(self, num):
+    def print_tick(self, number):
         """
         Determines what tick we should print for this number and prints it.
 
@@ -87,7 +83,6 @@ class Data(object):
 
         for i in range(self.number_of_ticks):
 
-            number = self.round(num)
             less_than = (i * self.distance) + 0 + self.distance
             greater_than = (i - 1) * self.distance + 0 + self.distance
             result = (number <= less_than and number >= greater_than)
