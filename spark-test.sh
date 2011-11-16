@@ -19,14 +19,14 @@ it_charts_pipe_data() {
 
 it_charts_spaced_data() {
   data="0 30 55 80 33 150"
-  graph="$($spark $data)"
+  graph=$($spark "$data")
 
   test $graph = '▁▂▄▅▂█'
 }
 
 it_charts_way_spaced_data() {
   data="0 30               55 80 33     150"
-  graph="$($spark $data)"
+  graph=$($spark "$data")
 
   test $graph = '▁▂▄▅▂█'
 }
