@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 #
 # spark
 # https://github.com/holman/spark
@@ -24,12 +25,21 @@
 #   spark -h
 #   # => Prints the spark help text.
 
-# Prints the help text for spark.
-#
-# Returns nothing.
-help()
-{
-  cat <<-EOF
+import getopt
+import math
+import os
+import re
+import sys
+
+
+def help():
+    """
+    Prints the help text for spark.
+
+    Returns nothing.
+    """
+
+    print """
 
   USAGE:
     spark [comma,separated,value,list]
@@ -39,118 +49,84 @@ help()
     ▁▁▃▂▇
     spark 0,30,55,80,33,150
     ▁▂▃▅▂▇
-EOF
-}
+"""
 
 # The actual fun characters we are generating in the sparkline.
-ticks=(▁ ▂ ▃ ▄ ▅ ▆ ▇ █)
+ticks = [u"▁", u"▂", u"▃", u"▄", u"▅", u"▆", u"▇", u"█"]
 
-# The numbers the user gave us.
-numbers=()
 
-# The sorted array of the numbers.
-sorted=()
+class Data(object):
+    """
+    Container class which parses the string data from the
+    user and caches all relevant values
+    """
 
-# This sets up our secondary array so we can actually generate the correct
-# tick.
-#
-# Returns nothing.
-setup_array() {
-  # 3,6,2 => 2,3,6
-  sorted=$(echo $1 | tr ',' '\n' | sort -k1,1n | paste -s -d',' -)
+    def __init__(self, arg):
+        self.arg = arg.strip()
+        self.split = re.split("[,\s]+", self.arg)
+        self.numbers = [float((x.strip())) for x in self.split]
+        self.number_of_ticks = len(ticks)
+        self.setup()
 
-  # convert comma-separated string to array
-  IFS=,
-  sorted=($sorted)
-  numbers=($1)
-}
+    def setup(self):
+        self.sorted = sorted(self.numbers)
+        self.max = self.sorted[-1]
+        self.min = self.sorted[0]
+        if self.min < 0:
+            self.numbers = [(x - self.min) for x in self.numbers]
+            self.setup()
+        else:
+            self.distance = self.max / self.number_of_ticks
+            if self.distance == 0:
+                self.distance = 1
 
-# The maximum value of the sorted array. In other words, the last value.
-sort_max()
-{
-  last=${#sorted[@]}
-  echo $(echo ${sorted[$last - 1]} | awk '{printf "%.0f",$1}')
-}
+    def print_tick(self, number):
+        """
+        Determines what tick we should print for this number and prints it.
 
-# The minimum value of the sorted array. In other words, the first value.
-sort_min()
-{
-  echo ${sorted[0]}
-}
+        Returns nothing.
+        """
 
-# Find the distance between tiers so we know which tick to assign a character.
-tier()
-{
-  number_of_ticks=${#ticks[@]}
-  distance=$(( $(sort_max) / $number_of_ticks ))
-  if [ $distance -eq 0 ]
-  then
-    distance=1
-  fi
-  echo $distance
-}
+        for i in range(self.number_of_ticks):
 
-# Determines what tick we should print for this number and prints it.
-#
-# Returns nothing.
-print_tick()
-{
-  tier=$(tier)
+            less_than = (i * self.distance) + 0 + self.distance
+            greater_than = (i - 1) * self.distance + 0 + self.distance
+            result = (number <= less_than and number >= greater_than)
 
-  for (( i = 0 ; i < ${#ticks[@]} ; i++ ))
-  do
+            if result:
+                sys.stdout.write(ticks[i].encode("utf-8"))
+                return
 
-    number=$(echo $1 | awk '{printf "%.0f",$1}')
-    less_than=$(( $i * $tier + sort_min + $tier ))
-    greater_than=$(( ($i - 1) * $tier + sort_min + $tier ))
-    result=$(( $number <= $less_than && $number >= $greater_than ))
+        sys.stdout.write(ticks[-1].encode("utf-8"))
 
-    if [ $result -eq 1 ]
-    then
-      printf '%s' "${ticks[$i]}"
-      return
-    fi
-  done
+    def print_ticks(self):
+        """
+        Iterate over all of our ticks and print them out.
 
-  last=${#ticks[@]}
-  printf '%s' ${ticks[$last-1]}
-}
+        Returns nothing.
+        """
+        for number in self.numbers:
+            self.print_tick(number)
+        print
 
-# Iterate over all of our ticks and print them out.
-#
-# Returns nothing.
-print_ticks()
-{
-  for number in ${numbers[@]}
-  do
-    print_tick $number
-  done
-  echo
-}
 
-while getopts ":h" option; do
-  case "$option" in
-    h) help && exit ;;
-#    [?]) echo "$OPTARG";;
-  esac
-done
+if __name__ == "__main__":
+    args = sys.argv[1:]
 
-# Accept input from $1 or from the pipeline.
-if test "$*" != ""
-then
-  data="$*"
-else
-  # check to see if stdin's a tty
-  if [ -t 0 ]; then
-    help
-    exit
-  fi
+    optlist, args = getopt.getopt(args, ':h')
+    for k, v in optlist:
+        if k == "-h":
+            help()
+            sys.exit(0)
 
-  data="`cat`"
-fi
+    # Accept input from $1 or from the pipeline.
+    if len(args) > 0:
+        data = Data(args[0])
+    else:
+        # check to see if stdin's a tty
+        if sys.stdin.isatty():
+            help()
+            sys.exit(0)
+        data = Data(sys.stdin.read())
 
-# Trim spaces to allow input like '1, 2, 3'
-data=$(echo $data | tr -s '[:space:]' ',')
-
-setup_array $data
-print_ticks $data
+    data.print_ticks()
