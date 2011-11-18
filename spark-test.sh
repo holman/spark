@@ -4,6 +4,10 @@ describe "spark: Generates sparklines for a set of data."
 
 spark="./spark"
 
+it_shows_help_with_no_argv() {
+  $spark | grep USAGE
+}
+
 it_graphs_argv_data() {
   graph="$($spark 1,5,22,13,5)"
 
