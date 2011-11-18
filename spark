@@ -75,9 +75,11 @@ spark()
   echo
 }
 
-[ "$1" == '-h' ] && {
-  help
-  exit
-}
+# show help for no arguments if stdin is a terminal
+if ([ -z $1 ] && [ -t 0 ]) || [ "$1" == '-h' ]
+then
+	help
+	exit
+fi
 
 spark ${@:-`cat`}
