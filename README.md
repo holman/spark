@@ -9,6 +9,10 @@ spark is a [shell script][bin], so drop it somewhere and make sure it's added
 to your `$PATH`. It's helpful if you have a super-neat collection of dotfiles,
 [like mine][dotfiles].
 
+If you're on OS X, spark is also on [Homebrew][brew]:
+
+    brew install spark
+
 ## usage
 
 Just run `spark` and pass it a list of numbers (comma-delimited, spaces,
@@ -68,7 +72,8 @@ Sounds like a wiki is a great place to collect all of your
 
 This is a [@holman][holman] joint.
 
-[dotfiles]: https://github.com/holman/dotfiles 
+[dotfiles]: https://github.com/holman/dotfiles
+[brew]:     https://github.com/mxcl/homebrew
 [bin]:      https://github.com/holman/spark/blob/master/spark
 [wiki]:     https://github.com/holman/spark/wiki/Wicked-Cool-Usage
 [holman]:   https://twitter.com/holman
