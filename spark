@@ -63,16 +63,15 @@ spark()
     numbers=$numbers${numbers:+ }$n
   done
 
-  # print ticks
-  local ticks=(▁ ▂ ▃ ▄ ▅ ▆ ▇ █)
-  local f=$(( (($max-$min)<<8)/(${#ticks[@]}-1) ))
-  (( f < 1 )) && f=1
+  # Find the max equals size based on terminal size
+  local columns=$(stty size | cut -d' ' -f2)
+  local max_equals_size=$(( ($columns-2) ))
 
   for n in $numbers
   do
-    echo -n ${ticks[$(( ((($n-$min)<<8)/$f) ))]}
+    local index=$(( (($max_equals_size * $n)/$max) ))
+    printf '8%*sD\n' "$index" ' ' | tr ' ' '='
   done
-  echo
 }
 
 # show help for no arguments if stdin is a terminal
