@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Spark by holman</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Spark</h1>
+        <p> ▁▂▃▅▂▇ in your shell.</p>
+        <p class="view"><a href="https://github.com/holman/spark">View the Project on GitHub <small>holman/spark</small></a></p>
+        <ul>
+          <li><a href="https://github.com/holman/spark/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/holman/spark/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/holman/spark">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>spark</h1>
+
+<h3>sparklines for your shell</h3>
+
+<p>See? Here's a graph of your productivity gains after using spark: ▁▂▃▅▇</p>
+
+<h2>install</h2>
+
+<p>spark is a <a href="https://github.com/holman/spark/blob/master/spark">shell script</a>, so drop it somewhere and make sure it's added<br>
+to your <code>$PATH</code>. It's helpful if you have a super-neat collection of dotfiles,<br><a href="https://github.com/holman/dotfiles">like mine</a>.</p>
+
+<p>If you're on OS X, spark is also on <a href="https://github.com/mxcl/homebrew">Homebrew</a>:</p>
+
+<pre><code>brew install spark
+</code></pre>
+
+<h2>usage</h2>
+
+<p>Just run <code>spark</code> and pass it a list of numbers (comma-delimited, spaces,<br>
+whatever you'd like). It's designed to be used in conjunction with other<br>
+scripts that can output in that format.</p>
+
+<pre><code>spark 0 30 55 80 33 150
+▁▂▃▅▂▇
+</code></pre>
+
+<p>Invoke help with <code>spark -h</code>.</p>
+
+<h2>cooler usage</h2>
+
+<p>There's a lot of stuff you can do.</p>
+
+<p>Number of commits to the github/github Git repository, by author:</p>
+
+<div class="highlight">
+<pre>› git shortlog -s |
+      cut -f1 |
+      spark
+  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▃▁▁▁▁▁▁▁▁▂▁▁▅▁▂▁
+</pre>
+</div>
+
+
+<p>Magnitude of earthquakes over 1.0 in the last 24 hours:</p>
+
+<div class="highlight">
+<pre>› curl <a href="http://earthquake.usgs.gov/earthquakes/catalogs/eqs1day-M1.txt">http://earthquake.usgs.gov/earthquakes/catalogs/eqs1day-M1.txt</a> --silent | 
+  sed <span class="s1">'1d'</span> |
+  cut -d, -f9 |
+  spark
+  ▅▆▂▃▂▂▂▅▂▂▅▇▂▂▂▃▆▆▆▅▃▂▂▂▁▂▂▆▁▃▂▂▂▂▃▂▆
+</pre>
+</div>
+
+
+<p>Code visualization. The number of characters of <code>spark</code> itself, by line, ignoring empty lines:</p>
+
+<div class="highlight">
+<pre>› awk <span class="s1">'{ print length($0) }'</span> spark |
+  grep -Ev 0 |
+  spark
+  ▁▁▁▁▅▁▇▁▁▅▁▁▁▁▁▂▂▁▃▃▁▁▃▁▃▁▂▁▁▂▂▅▂▃▂▃▃▁▆▃▃▃▁▇▁
+</pre>
+</div>
+
+
+<p>Since it's just a shell script, you could pop it in your prompt, too:</p>
+
+<pre><code>ruby-1.8.7-p334 in spark/ on master with history: ▂▅▇▂
+›
+</code></pre>
+
+<h2>wicked cool usage</h2>
+
+<p>Sounds like a wiki is a great place to collect all of your <br><a href="https://github.com/holman/spark/wiki/Wicked-Cool-Usage">wicked cool usage</a> for spark.</p>
+
+<h2>▇▁ ⟦⟧ ▇▁</h2>
+
+<p>This is a <a href="https://twitter.com/holman">@holman</a> joint.</p>
+      </section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/holman">holman</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+  </body>
+</html>
