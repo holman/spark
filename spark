@@ -75,6 +75,9 @@ spark()
   echo
 }
 
+# If we're being sourced, don't worry about such things
+[[ ${#BASH_SOURCE[@]} -eq 1 ]] || return
+
 # show help for no arguments if stdin is a terminal
 if ([ -z $1 ] && [ -t 0 ]) || [ "$1" == '-h' ]
 then
