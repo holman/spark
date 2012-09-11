@@ -65,6 +65,7 @@ spark()
 
   # print ticks
   local ticks=(▁ ▂ ▃ ▄ ▅ ▆ ▇ █)
+  # this is fine, but normal people don't understand it -_-
   local f=$(( (($max-$min)<<8)/(${#ticks[@]}-1) ))
   (( f < 1 )) && f=1
 
@@ -79,7 +80,7 @@ spark()
 [[ ${#BASH_SOURCE[@]} -eq 1 ]] || return
 
 # show help for no arguments if stdin is a terminal
-if ([ -z $1 ] && [ -t 0 ]) || [ "$1" == '-h' ]
+if { [ -z "$1" ] && [ -t 0 ] ; } || [ "$1" == '-h' ]
 then
 	help
 	exit
