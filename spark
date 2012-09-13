@@ -65,7 +65,7 @@ spark()
 
   # print ticks
   local ticks=(▁ ▂ ▃ ▄ ▅ ▆ ▇ █)
-  # this is fine, but normal people don't understand it -_-
+
   local f=$(( (($max-$min)<<8)/(${#ticks[@]}-1) ))
   (( f < 1 )) && f=1
 
