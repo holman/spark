@@ -63,6 +63,9 @@ spark()
     numbers=$numbers${numbers:+ }$n
   done
 
+  [ -n "$SPARK_MIN" ] && min=$SPARK_MIN
+  [ -n "$SPARK_MAX" ] && max=$SPARK_MAX
+
   # print ticks
   local ticks=(▁ ▂ ▃ ▄ ▅ ▆ ▇ █)
 
