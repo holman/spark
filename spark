@@ -24,24 +24,6 @@
 #   spark -h
 #   # => Prints the spark help text.
 
-# Prints the help text for spark.
-help()
-{
-  cat <<EOF
-
-  USAGE:
-    spark [-h] VALUE,...
-
-  EXAMPLES:
-    spark 1 5 22 13 53
-    ▁▁▃▂█
-    spark 0,30,55,80,33,150
-    ▁▂▃▄▂█
-    echo 9 13 5 17 1 | spark
-    ▄▆▂█▁
-EOF
-}
-
 # Generates sparklines.
 #
 # $1 - The data we'd like to graph.
@@ -77,13 +59,31 @@ spark()
 }
 
 # If we're being sourced, don't worry about such things
-[[ ${#BASH_SOURCE[@]} -eq 1 ]] || return
+if [ "$BASH_SOURCE" == "$0" ]; then
+  # Prints the help text for spark.
+  help()
+  {
+    cat <<EOF
 
-# show help for no arguments if stdin is a terminal
-if { [ -z "$1" ] && [ -t 0 ] ; } || [ "$1" == '-h' ]
-then
-	help
-	exit
+    USAGE:
+      spark [-h] VALUE,...
+
+    EXAMPLES:
+      spark 1 5 22 13 53
+      ▁▁▃▂█
+      spark 0,30,55,80,33,150
+      ▁▂▃▄▂█
+      echo 9 13 5 17 1 | spark
+      ▄▆▂█▁
+EOF
+  }
+
+  # show help for no arguments if stdin is a terminal
+  if { [ -z "$1" ] && [ -t 0 ] ; } || [ "$1" == '-h' ]
+  then
+    help
+    exit
+  fi
+
+  spark ${@:-`cat`}
 fi
-
-spark ${@:-`cat`}
