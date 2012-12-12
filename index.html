@@ -35,8 +35,9 @@
 
 <h2>install</h2>
 
-<p>spark is a <a href="https://github.com/holman/spark/blob/master/spark">shell script</a>, so drop it somewhere and make sure it's added<br>
-to your <code>$PATH</code>. It's helpful if you have a super-neat collection of dotfiles,<br><a href="https://github.com/holman/dotfiles">like mine</a>.</p>
+<p>spark is a <a href="https://github.com/holman/spark/blob/master/spark">shell script</a>, so drop it somewhere and make sure it's added
+to your <code>$PATH</code>. It's helpful if you have a super-neat collection of dotfiles,
+<a href="https://github.com/holman/dotfiles">like mine</a>.</p>
 
 <p>If you're on OS X, spark is also on <a href="https://github.com/mxcl/homebrew">Homebrew</a>:</p>
 
@@ -45,8 +46,8 @@ to your <code>$PATH</code>. It's helpful if you have a super-neat collection of 
 
 <h2>usage</h2>
 
-<p>Just run <code>spark</code> and pass it a list of numbers (comma-delimited, spaces,<br>
-whatever you'd like). It's designed to be used in conjunction with other<br>
+<p>Just run <code>spark</code> and pass it a list of numbers (comma-delimited, spaces,
+whatever you'd like). It's designed to be used in conjunction with other
 scripts that can output in that format.</p>
 
 <pre><code>spark 0 30 55 80 33 150
@@ -61,37 +62,28 @@ scripts that can output in that format.</p>
 
 <p>Number of commits to the github/github Git repository, by author:</p>
 
-<div class="highlight">
-<pre>› git shortlog -s |
+<div class="highlight"><pre>› git shortlog -s |
       cut -f1 |
       spark
   ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▃▁▁▁▁▁▁▁▁▂▁▁▅▁▂▁
-</pre>
-</div>
-
+</pre></div>
 
 <p>Magnitude of earthquakes over 1.0 in the last 24 hours:</p>
 
-<div class="highlight">
-<pre>› curl <a href="http://earthquake.usgs.gov/earthquakes/catalogs/eqs1day-M1.txt">http://earthquake.usgs.gov/earthquakes/catalogs/eqs1day-M1.txt</a> --silent | 
+<div class="highlight"><pre>› curl http://earthquake.usgs.gov/earthquakes/catalogs/eqs1day-M1.txt --silent | 
   sed <span class="s1">'1d'</span> |
   cut -d, -f9 |
   spark
   ▅▆▂▃▂▂▂▅▂▂▅▇▂▂▂▃▆▆▆▅▃▂▂▂▁▂▂▆▁▃▂▂▂▂▃▂▆
-</pre>
-</div>
-
+</pre></div>
 
 <p>Code visualization. The number of characters of <code>spark</code> itself, by line, ignoring empty lines:</p>
 
-<div class="highlight">
-<pre>› awk <span class="s1">'{ print length($0) }'</span> spark |
+<div class="highlight"><pre>› awk <span class="s1">'{ print length($0) }'</span> spark |
   grep -Ev 0 |
   spark
   ▁▁▁▁▅▁▇▁▁▅▁▁▁▁▁▂▂▁▃▃▁▁▃▁▃▁▂▁▁▂▂▅▂▃▂▃▃▁▆▃▃▃▁▇▁
-</pre>
-</div>
-
+</pre></div>
 
 <p>Since it's just a shell script, you could pop it in your prompt, too:</p>
 
@@ -101,7 +93,8 @@ scripts that can output in that format.</p>
 
 <h2>wicked cool usage</h2>
 
-<p>Sounds like a wiki is a great place to collect all of your <br><a href="https://github.com/holman/spark/wiki/Wicked-Cool-Usage">wicked cool usage</a> for spark.</p>
+<p>Sounds like a wiki is a great place to collect all of your 
+<a href="https://github.com/holman/spark/wiki/Wicked-Cool-Usage">wicked cool usage</a> for spark.</p>
 
 <h2>▇▁ ⟦⟧ ▇▁</h2>
 
@@ -112,6 +105,7 @@ scripts that can output in that format.</p>
       <p>Project maintained by <a href="https://github.com/holman">holman</a></p>
       <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
     </footer>
-    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
   </body>
 </html>
