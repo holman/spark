@@ -82,7 +82,7 @@ EOF
   if { [ -z "$1" ] && [ -t 0 ] ; } || [ "$1" == '-h' ]
   then
     help
-    exit
+    exit 0
   fi
 
   spark ${@:-`cat`}
