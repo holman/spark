@@ -27,6 +27,16 @@
 # Generates sparklines.
 #
 # $1 - The data we'd like to graph.
+_echo()
+{
+  if [ "X$1" = "X-n" ]; then
+    shift
+    printf "%s" "$*"
+  else
+    printf "%s\n" "$*"
+  fi
+}
+
 spark()
 {
   local n numbers=
@@ -53,9 +63,9 @@ spark()
 
   for n in $numbers
   do
-    echo -n ${ticks[$(( ((($n-$min)<<8)/$f) ))]}
+    _echo -n ${ticks[$(( ((($n-$min)<<8)/$f) ))]}
   done
-  echo
+  _echo
 }
 
 # If we're being sourced, don't worry about such things
