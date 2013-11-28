@@ -73,17 +73,18 @@ if [ "$BASH_SOURCE" == "$0" ]; then
   # Prints the help text for spark.
   help()
   {
+    local spark=$(basename $0)
     cat <<EOF
 
     USAGE:
-      spark [-h|--help] VALUE,...
+      $spark [-h|--help] VALUE,...
 
     EXAMPLES:
-      spark 1 5 22 13 53
+      $spark 1 5 22 13 53
       ▁▁▃▂█
-      spark 0,30,55,80,33,150
+      $spark 0,30,55,80,33,150
       ▁▂▃▄▂█
-      echo 9 13 5 17 1 | spark
+      echo 9 13 5 17 1 | $spark
       ▄▆▂█▁
 EOF
   }
