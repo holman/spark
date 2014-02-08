@@ -40,6 +40,8 @@ _echo()
 spark()
 {
   local n numbers=
+  local height=1
+  [ -n "$SPARK_HEIGHT" ] && height=$SPARK_HEIGHT
 
   # find min/max values
   local min=0xffffffff max=0
@@ -58,14 +60,24 @@ spark()
   # print ticks
   local ticks=(▁ ▂ ▃ ▄ ▅ ▆ ▇ █)
 
-  local f=$(( (($max-$min)<<8)/(${#ticks[@]}-1) ))
+  local f=$(( (($max-$min)<<8)/$height/(${#ticks[@]}-1) ))
   (( f < 1 )) && f=1
 
-  for n in $numbers
-  do
-    _echo -n ${ticks[$(( ((($n-$min)<<8)/$f) ))]}
+  for (( i=1;i<$height+1;i++ ))
+  do for n in $numbers
+    do
+      local thre=$(( ($max-$min)*($height-$i)/$height+$min-1 ))
+      if [ "$n" -gt "$thre" ]
+      then
+        local lvl=$(( ((($n-$thre-1)<<8)/$f) ))
+        (( lvl >= ${#ticks[@]} )) && lvl=$(( ${#ticks[@]}-1 ))
+        _echo -n ${ticks[$lvl]}
+      else
+        _echo -n ' '
+      fi
+    done
+    _echo
   done
-  _echo
 }
 
 # If we're being sourced, don't worry about such things
