@@ -69,7 +69,7 @@ spark()
       local thre=$(( ($max-$min)*($height-$i)/$height+$min-1 ))
       if [ "$n" -gt "$thre" ]
       then
-        local lvl=$(( ((($n-$thre+1)<<8)/$f) ))
+        local lvl=$(( ((($n-$thre-1)<<8)/$f) ))
         (( lvl >= ${#ticks[@]} )) && lvl=$(( ${#ticks[@]}-1 ))
         _echo -n ${ticks[$lvl]}
       else
