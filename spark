@@ -78,7 +78,6 @@ spark()
     done
     _echo
   done
-  _echo
 }
 
 # If we're being sourced, don't worry about such things
