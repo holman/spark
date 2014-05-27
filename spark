@@ -58,6 +58,9 @@ spark()
   # print ticks
   local ticks=(▁ ▂ ▃ ▄ ▅ ▆ ▇ █)
 
+  # use a high tick if data is constant
+  (( min == max )) && ticks=(▅ ▆)
+
   local f=$(( (($max-$min)<<8)/(${#ticks[@]}-1) ))
   (( f < 1 )) && f=1
 
