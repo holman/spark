@@ -64,7 +64,8 @@ then
   # Prints the help text for spark.
   help()
   {
-    local spark=$(basename $0)
+    local spark=${0##*/}
+
     cat <<EOF
 
     USAGE:
