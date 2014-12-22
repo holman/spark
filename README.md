@@ -40,7 +40,7 @@ Number of commits to the github/github Git repository, by author:
 Magnitude of earthquakes over 1.0 in the last 24 hours:
 
 ```sh
-› curl http://earthquake.usgs.gov/earthquakes/catalogs/eqs1day-M1.txt --silent | 
+› curl http://earthquake.usgs.gov/earthquakes/catalogs/eqs1day-M1.txt --silent |
   sed '1d' |
   cut -d, -f9 |
   spark
@@ -65,8 +65,21 @@ ruby-1.8.7-p334 in spark/ on master with history: ▂▅▇▂
 
 ## wicked cool usage
 
-Sounds like a wiki is a great place to collect all of your 
+Sounds like a wiki is a great place to collect all of your
 [wicked cool usage][wiki] for spark.
+
+## contributing
+
+Contributions welcome! Like seriously, I think contributions are real nifty.
+
+Make your changes and be sure the tests all pass:
+
+    ./test
+
+That also means you should probably be adding your own tests as well as changing
+the code. Wouldn't want to lose all your good work down the line, after all!
+
+Once everything looks good, open a pull request.
 
 ## ▇▁ ⟦⟧ ▇▁
 
