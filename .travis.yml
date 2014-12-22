@@ -2,7 +2,7 @@ language: bash
 
 before_script:
     - curl -L https://github.com/bmizerany/roundup/tarball/v0.0.5 | tar xvzf -
-    - cd bmizerany-roundup-5c5dcb1 && ./configure && make && make install
+    - cd bmizerany-roundup-5c5dcb1 && ./configure && make && sudo make install
 
 script:
     - bash test
