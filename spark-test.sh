@@ -71,3 +71,10 @@ it_charts_no_tier_0() {
   test $graph = '▁▂▄▆█'
 
 }
+
+it_equalizes_at_midtier_on_same_data() {
+  data="1,1,1,1"
+  graph="$($spark $data)"
+
+  test $graph = '▅▅▅▅'
+}
