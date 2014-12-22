@@ -5,4 +5,4 @@ before_script:
     - cd bmizerany-roundup-5c5dcb1 && ./configure && make && sudo make install
 
 script:
-    - bash test
+    - ./test
