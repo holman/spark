@@ -13,6 +13,10 @@ If you're on OS X, spark is also on [Homebrew][brew]:
 
     brew install spark
 
+If you use [bpkg](https://github.com/bpkg/bpkg), you can install it with:
+
+    bpkg install holman/spark
+
 ## usage
 
 Just run `spark` and pass it a list of numbers (comma-delimited, spaces,
