@@ -56,7 +56,7 @@ spark()
   done
 
   # print ticks
-  local ticks=(▁ ▂ ▃ ▄ ▅ ▆ ▇ █)
+  local ticks=(_ ▁ ▂ ▃ ▄ ▅ ▆ ▇ █)
 
   # use a high tick if data is constant
   (( min == max )) && ticks=(▅ ▆)
