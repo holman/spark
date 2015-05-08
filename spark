@@ -10,8 +10,8 @@
 #
 #   https://datacollective.org/sparkblocks
 #
-# spark takes a comma-separated list of data and then prints a sparkline out of
-# it.
+# spark takes a comma-separated or space-separated list of data and then prints
+# a sparkline out of it.
 #
 # Examples:
 #
