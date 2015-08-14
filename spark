@@ -118,7 +118,10 @@ if [ "$BASH_SOURCE" == "$0" ]; then
     cat <<EOF
 
     USAGE:
-      $spark [-h|--help] VALUE,...
+      $spark [-h|--help|-c fire] VALUE,...
+
+    OPTIONS:
+      -c fire  Output fire colored ticks (smallest = yellow, largest = red)
 
     EXAMPLES:
       $spark 1 5 22 13 53
