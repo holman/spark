@@ -76,3 +76,11 @@ it_equalizes_at_midtier_on_same_data() {
 
   test $graph = '▅▅▅▅'
 }
+
+it_charts_in_fire_colored_ticks() {
+  data="1,2,3,4,5,6,7,8"
+  graph="$($spark -c fire $data)"
+
+  expected_graph="$(echo "$(tput setaf 228)▁")$(echo "$(tput setaf 227)▂")$(echo "$(tput setaf 226)▃")$(echo "$(tput setaf 220)▄")$(echo "$(tput setaf 214)▅")$(echo "$(tput setaf 208)▆")$(echo "$(tput setaf 202)▇")$(echo "$(tput setaf 196)█")"
+  test $graph = $expected_graph
+}
