@@ -41,14 +41,14 @@ Number of commits to the github/github Git repository, by author:
   ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▃▁▁▁▁▁▁▁▁▂▁▁▅▁▂▁▁▁▂▁▁▁▁▁▁▁▁▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 ```
 
-Magnitude of earthquakes over 1.0 in the last 24 hours:
+Magnitude of earthquakes worldwide 2.5 and above in the last 24 hours:
 
 ```sh
-› curl http://earthquake.usgs.gov/earthquakes/catalogs/eqs1day-M1.txt --silent |
+› curl earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.csv --silent |
   sed '1d' |
-  cut -d, -f9 |
+  cut -d, -f5 |
   spark
-  ▅▆▂▃▂▂▂▅▂▂▅▇▂▂▂▃▆▆▆▅▃▂▂▂▁▂▂▆▁▃▂▂▂▂▃▂▆▂▂▂▁▂▂▃▂▂▃▂▂▃▂▂▁▂▂▅▂▂▆▆▅▃▆
+▃█▅▅█▅▃▃▅█▃▃▁▅▅▃▃▅▁▁▃▃▃▃▃▅▃█▅▁▃▅▃█▃▁
 ```
 
 Code visualization. The number of characters of `spark` itself, by line, ignoring empty lines:
