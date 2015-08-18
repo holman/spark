@@ -1,0 +1,9 @@
+{
+  "name": "spark",
+  "version": "v1.0.1",
+  "description": "▁▂▃▅▂▇ in your shell.",
+  "global": "true",
+  "install": "install spark ${PREFIX:-/usr/local}/bin",
+  "scripts": [ "spark" ]
+}
+
