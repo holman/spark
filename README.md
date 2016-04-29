@@ -17,6 +17,11 @@ If you're on OS X, spark is also on [Homebrew][brew]:
 
     brew install spark
 
+Depending on the fonts you have in your system and you use in the
+terminal, you might end up with irregular blocks. This is due to some
+fonts providing only part of the blocks, while the others are taken from
+a different, fallback font.
+
 ## usage
 
 Just run `spark` and pass it a list of numbers (comma-delimited, spaces,
