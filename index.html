@@ -75,9 +75,9 @@ scripts that can output in that format.</p>
 
 <p>Magnitude of earthquakes over 1.0 in the last 24 hours:</p>
 
-<div class="highlight"><pre>› curl http://earthquake.usgs.gov/earthquakes/catalogs/eqs1day-M1.txt --silent | 
+<div class="highlight"><pre>curl earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.csv --silent |
   sed <span class="s1">'1d'</span> |
-  cut -d, -f9 |
+  cut -d, -f5 |
   spark
   ▅▆▂▃▂▂▂▅▂▂▅▇▂▂▂▃▆▆▆▅▃▂▂▂▁▂▂▆▁▃▂▂▂▂▃▂▆▂▂▂▁▂▂▃▂▂▃▂▂
 </pre></div>
@@ -99,7 +99,7 @@ scripts that can output in that format.</p>
 <h2>
 <a name="wicked-cool-usage" class="anchor" href="#wicked-cool-usage"><span class="octicon octicon-link"></span></a>wicked cool usage</h2>
 
-<p>Sounds like a wiki is a great place to collect all of your 
+<p>Sounds like a wiki is a great place to collect all of your
 <a href="https://github.com/holman/spark/wiki/Wicked-Cool-Usage">wicked cool usage</a> for spark.</p>
 
 <h2>
@@ -113,6 +113,6 @@ scripts that can output in that format.</p>
       <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
     </footer>
     <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-    
+
   </body>
 </html>
