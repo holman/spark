@@ -49,7 +49,7 @@ Number of commits to the github/github Git repository, by author:
 Magnitude of earthquakes worldwide 2.5 and above in the last 24 hours:
 
 ```sh
-› curl earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.csv --silent |
+› curl -s https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.csv |
   sed '1d' |
   cut -d, -f5 |
   spark
