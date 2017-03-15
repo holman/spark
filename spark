@@ -16,10 +16,10 @@
 # Examples:
 #
 #   spark 1 5 22 13 53
-#   # => ▁▁▃▂▇
+#   # => __▃▁█
 #
 #   spark 0 30 55 80 33 150
-#   # => ▁▂▃▅▂▇
+#   # => _▁▂▄▁█
 #
 #   spark -h
 #   # => Prints the spark help text.
@@ -56,7 +56,7 @@ spark()
   done
 
   # print ticks
-  local ticks=(▁ ▂ ▃ ▄ ▅ ▆ ▇ █)
+  local ticks=(_ ▁ ▂ ▃ ▄ ▅ ▆ ▇ █)
 
   # use a high tick if data is constant
   (( min == max )) && ticks=(▅ ▆)
@@ -84,11 +84,11 @@ if [ "$BASH_SOURCE" == "$0" ]; then
 
     EXAMPLES:
       $spark 1 5 22 13 53
-      ▁▁▃▂█
+      __▃▁█
       $spark 0,30,55,80,33,150
-      ▁▂▃▄▂█
+      _▁▂▄▁█
       echo 9 13 5 17 1 | $spark
-      ▄▆▂█▁
+      ▄▆▂█_
 EOF
   }
 
