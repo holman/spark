@@ -37,6 +37,17 @@ _echo()
   fi
 }
 
+REGULAR_TICKS="▁:▂:▃:▄:▅:▆:▇:█"
+FIRE_TICKS="$(echo "$(tput setaf 228)▁"):$(echo "$(tput setaf 227)▂"):$(echo "$(tput setaf 226)▃"):$(echo "$(tput setaf 220)▄"):$(echo "$(tput setaf 214)▅"):$(echo "$(tput setaf 208)▆"):$(echo "$(tput setaf 202)▇"):$(echo "$(tput setaf 196)█")"
+
+
+ticks_styles=(
+  $REGULAR_TICKS
+  $FIRE_TICKS
+)
+
+tick_style=0
+
 spark()
 {
   local n numbers=
@@ -56,7 +67,7 @@ spark()
   done
 
   # print ticks
-  local ticks=(▁ ▂ ▃ ▄ ▅ ▆ ▇ █)
+  local ticks=($(echo ${ticks_styles[$tick_style]} | tr : " "))
 
   # use a high tick if data is constant
   (( min == max )) && ticks=(▅ ▆)
@@ -71,6 +82,33 @@ spark()
   _echo
 }
 
+parse_args()
+{
+  OPTIND=1
+
+  while getopts "h?c:" opt; do
+    case "$opt" in
+      c)
+        case "$OPTARG" in
+          fire)
+            tick_style=1
+            ;;
+        esac
+        ;;
+    esac
+  done
+
+  shift $((OPTIND-1))
+
+  [ "$1" = "--" ] && shift
+
+  if [ $# -eq 0 ]; then
+    data=$(cat)
+  else
+    data=$@
+  fi
+}
+
 # If we're being sourced, don't worry about such things
 if [ "$BASH_SOURCE" == "$0" ]; then
   # Prints the help text for spark.
@@ -80,7 +118,10 @@ if [ "$BASH_SOURCE" == "$0" ]; then
     cat <<EOF
 
     USAGE:
-      $spark [-h|--help] VALUE,...
+      $spark [-h|--help|-c fire] VALUE,...
+
+    OPTIONS:
+      -c fire  Output fire colored ticks (smallest = yellow, largest = red)
 
     EXAMPLES:
       $spark 1 5 22 13 53
@@ -99,5 +140,7 @@ EOF
     exit 0
   fi
 
-  spark ${@:-`cat`}
+  parse_args ${@:-`cat`}
+
+  spark $data
 fi
