@@ -24,6 +24,12 @@
 #   spark -h
 #   # => Prints the spark help text.
 
+# Portable round function
+round()
+{
+  echo "($1+0.5)/1" | bc
+}
+
 # Generates sparklines.
 #
 # $1 - The data we'd like to graph.
@@ -49,7 +55,8 @@ spark()
     # on Linux (or with bash4) we could use `printf %.0f $n` here to
     # round the number but that doesn't work on OS X (bash3) nor does
     # `awk '{printf "%.0f",$1}' <<< $n` work, so just cut it off
-    n=${n%.*}
+    #n=${n%.*} #to truncate instead of round
+    n=$(round $n)
     (( n < min )) && min=$n
     (( n > max )) && max=$n
     numbers=$numbers${numbers:+ }$n
