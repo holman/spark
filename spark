@@ -26,23 +26,13 @@
 
 # Generates sparklines.
 #
-# $1 - The data we'd like to graph.
-_echo()
-{
-  if [ "X$1" = "X-n" ]; then
-    shift
-    printf "%s" "$*"
-  else
-    printf "%s\n" "$*"
-  fi
-}
-
+# $@ - The data we'd like to graph.
 spark()
 {
   local n numbers=
 
   # find min/max values
-  local min=0xffffffff max=0
+  local min=${MIN:-0xffffffff} max=${MAX:-0}
 
   for n in ${@//,/ }
   do
@@ -66,17 +56,19 @@ spark()
 
   for n in $numbers
   do
-    _echo -n ${ticks[$(( ((($n-$min)<<8)/$f) ))]}
+    printf ${ticks[$(( ((($n-$min)<<8)/$f) ))]}
   done
-  _echo
+  printf "\n"
 }
 
 # If we're being sourced, don't worry about such things
-if [ "$BASH_SOURCE" == "$0" ]; then
+if [ "$BASH_SOURCE" == "$0" ]
+then
   # Prints the help text for spark.
   help()
   {
-    local spark=$(basename $0)
+    local spark=${0##*/}
+
     cat <<EOF
 
     USAGE:
