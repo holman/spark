@@ -55,8 +55,18 @@ spark()
     numbers=$numbers${numbers:+ }$n
   done
 
+
   # print ticks
+if [[ $CLICOLOR -eq '1' ]]
+then 
+  green=$(tput setaf 2)
+  blue=$(tput setaf 4)
+  red=$(tput setaf 1)
+  reset=$(tput sgr0)
+  local ticks=(${green}▁${reset} ${green}▂${reset} ${green}▃${reset} ${blue}▄${reset} ${blue}▅${reset} ${blue}▆${reset} ${red}▇${reset} ${red}█${reset})
+else
   local ticks=(▁ ▂ ▃ ▄ ▅ ▆ ▇ █)
+fi
 
   # use a high tick if data is constant
   (( min == max )) && ticks=(▅ ▆)
