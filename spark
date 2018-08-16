@@ -46,6 +46,11 @@ spark()
 
   for n in ${@//,/ }
   do
+    if [ $log = "base2" ]; then
+      n=`echo "scale = 0; l($n)" | bc -l`
+    elif [ $log = "base10" ]; then
+      n=`echo "scale = 0; l($n)/l(10)" | bc -l`
+    fi
     # on Linux (or with bash4) we could use `printf %.0f $n` here to
     # round the number but that doesn't work on OS X (bash3) nor does
     # `awk '{printf "%.0f",$1}' <<< $n` work, so just cut it off
@@ -89,6 +94,10 @@ if [ "$BASH_SOURCE" == "$0" ]; then
       ▁▂▃▄▂█
       echo 9 13 5 17 1 | $spark
       ▄▆▂█▁
+      echo 1,10,100,1000,10000,100000 | spark -l10
+      ▁▂▃▅▆█
+      echo 2,4,8,16,32,64,128,256,512,1024,2048,4096,8192 | spark -ln
+      ▁▁▂▂▃▄▄▄▅▅▆▇█
 EOF
   }
 
@@ -98,6 +107,13 @@ EOF
     help
     exit 0
   fi
+
+  # enable log, natural or base10, or no transformation by default
+  case $1 in
+    -ln) log=base2 ; shift ;;
+    -l10) log=base10 ; shift ;;
+    *) log="_" ;;
+  esac
 
   spark ${@:-`cat`}
 fi
