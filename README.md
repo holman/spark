@@ -31,6 +31,13 @@ scripts that can output in that format.
     spark 0 30 55 80 33 150
     ▁▂▃▅▂▇
 
+Spark also supports output on multiple rows:
+
+    spark -r 3 1,2,3,4,5,6,2,3
+        ▃█  
+      ▂▆██ ▂
+    ▁▅████▅█
+
 Invoke help with `spark -h`.
 
 ## cooler usage
