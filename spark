@@ -21,6 +21,11 @@
 #   spark 0 30 55 80 33 150
 #   # => ▁▂▃▅▂▇
 #
+#   spark -r 3 1,2,3,4,5,6,2,3
+#   # =>     ▃█  
+#          ▂▆██ ▂
+#        ▁▅████▅█
+#
 #   spark -h
 #   # => Prints the spark help text.
 
@@ -61,14 +66,32 @@ spark()
   # use a high tick if data is constant
   (( min == max )) && ticks=(▅ ▆)
 
-  local f=$(( (($max-$min)<<8)/(${#ticks[@]}-1) ))
+  local nticks=$((${#ticks[@]}))
+  local range=$((($max-$min)<<8))
+  local srange=$(($range/$rows))
+  local f=$(( (${srange}/(${nticks}-1)) ))
   (( f < 1 )) && f=1
 
-  for n in $numbers
+  local row=$rows
+  while [ $row -ne 0 ]
   do
-    _echo -n ${ticks[$(( ((($n-$min)<<8)/$f) ))]}
+    for n in $numbers
+    do
+      local val=$((($n-$min)<<8))
+	  if [ $val -ge $((($srange * $row))) ]; then
+	    #full tick
+	    _echo -n ${ticks[$(($nticks - 1))]}
+	  elif [ $val -lt $((($srange * ($row - 1)))) ]; then
+	    #empty tick
+	    _echo -n " "
+      else
+        #partial tick
+        _echo -n ${ticks[$(( ((($val-($srange * ($row - 1))))/$f) ))]}
+      fi
+    done
+    row=$(($row - 1))
+    _echo
   done
-  _echo
 }
 
 # If we're being sourced, don't worry about such things
@@ -80,13 +103,17 @@ if [ "$BASH_SOURCE" == "$0" ]; then
     cat <<EOF
 
     USAGE:
-      $spark [-h|--help] VALUE,...
+      $spark [-h|--help] [-r|--rows] <ROWS> VALUE,...
 
     EXAMPLES:
       $spark 1 5 22 13 53
       ▁▁▃▂█
       $spark 0,30,55,80,33,150
       ▁▂▃▄▂█
+      $spark -r 3 1,2,3,4,5,6,2,3
+          ▃█  
+        ▂▆██ ▂
+      ▁▅████▅█
       echo 9 13 5 17 1 | $spark
       ▄▆▂█▁
 EOF
@@ -97,6 +124,13 @@ EOF
   then
     help
     exit 0
+  fi
+  if [ "$1" == '-r' ] || [ "$1" == '--rows' ]
+  then
+    rows="$2"
+    shift 2
+  else
+    rows=1
   fi
 
   spark ${@:-`cat`}
