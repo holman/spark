@@ -2,7 +2,7 @@
 
 describe "spark: Generates sparklines for a set of data."
 
-spark="./spark"
+spark="../spark"
 
 it_shows_help_with_no_argv() {
   $spark | grep USAGE

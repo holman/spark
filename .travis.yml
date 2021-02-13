@@ -6,4 +6,5 @@ before_script:
     - cd -
 
 script:
+    - cd ./tests
     - ./test
