@@ -1,5 +1,5 @@
 {
-  description = "A very basic flake";
+  description = "▁▂▃▅▂▇ in your shell.";
 
   outputs = { self, nixpkgs }: {
 
